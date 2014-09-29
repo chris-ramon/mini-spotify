@@ -1,0 +1,114 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base href="/">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(client) app/vendor.css -->
+      <!-- bower:css -->
+      <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,client}) app/app.css -->
+    <link rel="stylesheet" href="app/app.css">
+      <!-- injector:css -->
+      <!-- endinjector -->
+    <!-- endbuild -->
+  </head>
+  <body ng-app="miniSpotifyApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div ng-view=""></div>
+
+    <script type='text/ng-template' id='playlistList.html'>
+      <div class='row-fluid'>
+        <div class="spotify-player-wrapper">
+          <section spotify-player></section>
+        </div>
+        <section class='playlists col-xs-3'>
+          <h2>Playlists:</h2>
+          <ul>
+            <li ng-repeat='playlist in PlayListService.playlists'
+                ng-click='PlayListService.setCurrentPlaylist(playlist)'
+                ng-class='{"playlist-highlighted": (PlayListService.currentPlaylist.id === playlist.id)}'>
+              {{playlist.name}}
+            </li>
+          </ul>
+        </section>
+        <article ng-controller='PlayListDetailCtrl' class='playlist col-xs-5'>
+          <h3>Tracks:</h3>
+          <ul>
+            <li ng-repeat='item in PlayListService.currentPlaylist.tracks.items'
+                ng-click='PlayerService.setCurrentTrack(item.track)'
+                ng-class='{"track-highlighted": (PlayerService.currentTrack.id === item.track.id)}'>
+              {{item.track.name}}
+            </li>
+          </ul>
+        </article>
+        <section ng-controller="RecommendedTracksCtrl" class="recommended-tracks col-xs-4">
+          <h3>Recommended Tracks:</h3>
+          <ul>
+            <li ng-repeat="track in RecommendedTrackService.tracks"
+                ng-click='PlayerService.setCurrentTrack(track)'
+                ng-class='{"track-highlighted": (PlayerService.currentTrack.id === track.id)}'>
+              {{track.name}}
+            </li>
+          </ul>
+        </section>
+      </div>
+    </script>
+
+    <script type='text/ng-template' id='login.html'>
+      <button ng-click='login()' class="btn btn-success">Login with spotify</button>
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!-- build:js({client,node_modules}) app/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
+      <script src="bower_components/underscore/underscore.js"></script>
+      <script src="bower_components/angular-local-storage/angular-local-storage.js"></script>
+      <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,client}) app/app.js -->
+        <script src="app/app.js"></script>
+          <!-- injector:js -->
+          <script src="app/controllers/LoginCtrl.js"></script>
+          <script src="app/controllers/PlayListCtrl.js"></script>
+          <script src="app/controllers/PlayListDetailCtrl.js"></script>
+          <script src="app/controllers/RecommendedTracksCtrl.js"></script>
+          <script src="app/directives/SpotifyPlayerDirective.js"></script>
+          <script src="app/events/PlayerEvents.js"></script>
+          <script src="app/main/config.js"></script>
+          <script src="app/main/run.js"></script>
+          <script src="app/postMessages/AuthPostMessage.js"></script>
+          <script src="app/rejections/AuthRejections.js"></script>
+          <script src="app/services/PlayListService.js"></script>
+          <script src="app/services/PlayerService.js"></script>
+          <script src="app/services/RecommendedTrackService.js"></script>
+          <script src="app/services/UserService.js"></script>
+          <!-- endinjector -->
+        <!-- endbuild -->
+
+  <%if (process.env.NODE_ENV == 'development') { %>
+  <script>angular.module('miniSpotifyApp').value('$global',{env:0});</script>
+  <% } else if (process.env.NODE_ENV == 'production') { %>
+  <script>angular.module('miniSpotifyApp').value('$global',{env:1});</script>
+  <% } %>
+</body>
+</html>

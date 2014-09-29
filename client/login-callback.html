@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<%if (process.env.NODE_ENV == 'development') { %>
+<script>var $global = {env:0};</script>
+<% } else if (process.env.NODE_ENV == 'production') { %>
+<script>var $global = {env:1};</script>
+<% } %>
+<script>
+  var target = window.self === window.top ? window.opener : window.parent;
+
+  var hash = window.location.hash;
+  if (hash) {
+    var token = window.location.hash.split('&')[0].split('=')[1];
+    target.postMessage(token, ($global.env ? 'http://polar-coast-9145.herokuapp.com/login' : 'http://localhost:9000/#/login'));
+  }
+</script>
+</html>
